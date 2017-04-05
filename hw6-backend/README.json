@@ -1,4 +1,5 @@
 {
 "netid":"tz13",
+"frontend":"https://tongbook.surge.sh",
 "backend":"https://tongbook.herokuapp.com"
 }

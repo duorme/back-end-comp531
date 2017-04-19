@@ -1,0 +1,8 @@
+
+> RiceBookServer@0.0.0 test /Users/user/Desktop/back-end/tongbook
+> mocha --opts mocha.opts src/**/*.spec.js "--reporter" "xunit"
+
+<testsuite name="Mocha Tests" tests="2" failures="0" errors="0" skipped="0" timestamp="Wed, 05 Apr 2017 21:54:06 GMT" time="0.099">
+<testcase classname="Validate Put Articles" name="should Put Articles" time="0.085"/>
+<testcase classname="Validate Profile functionality" name="should update a headline" time="0.009"/>
+</testsuite>

@@ -2,7 +2,7 @@ const md5 = require('md5')
 const Article = require('./model.js').Article
 const Profile = require('./model.js').Profile
 const isLoggedIn = require('./middleware.js').isLoggedIn
-
+//find get articles from server
 const getArticles = (req, res) => {
 
 	const username = req.username
@@ -32,24 +32,31 @@ const getArticles = (req, res) => {
 			}
 		})
 	}
+	//this part only return all articles
 	else{
-		Profile.find({username:username}).exec(function(err,items){
-		if(err){
+		// Profile.find({username:username}).exec(function(err,items){
+		// if(err){
+		// 		return console.log(err)
+		// }
+		// const userObj = items[0]
+		// const following = userObj.following
+		// following.push(username)
+		// Article.find({author: {$in : following}}).exec(function(e, docs){
+  //           if (e){
+  //               console.log(err)
+  //               res.sendStatus(500)
+  //               return
+  //           }
+  //           res.send({articles: docs})
+  //           return
+  //       })
+  		Article.find().exec(function(err, allarticles){
+			if(err)
 				return console.log(err)
-		}
-		const userObj = items[0]
-		const following = userObj.following
-		following.push(username)
-		Article.find({author: {$in : following}}).exec(function(e, docs){
-            if (e){
-                console.log(err)
-                res.sendStatus(500)
-                return
-            }
-            res.send({articles: docs})
-            return
-        })
-	})
+			else
+				res.send({articles:allarticles})
+		})
+
 	}
 }
 const addArticle = (req,res) =>{
@@ -63,6 +70,7 @@ const addArticle = (req,res) =>{
 	})
 
 }
+// check whether commentId exesits to put comment or articles
 const putArticle=(req,res)=>{
 	const text=req.body.text
 	const commentId=req.body.commentId

@@ -1,6 +1,6 @@
 const cookieKey='sid'
 const redis = require('redis').createClient("redis://h:pfe02f6bf53b86af67751ca5f35cf44707b4e8d7fedb1c12ecc127509755e24a4@ec2-34-206-56-163.compute-1.amazonaws.com:27519")
-
+// check user is authorized
 const isLoggedIn=(req,res,next)=>{
 	const sid = req.cookies[cookieKey]
 	if(!sid){

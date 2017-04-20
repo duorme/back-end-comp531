@@ -5,7 +5,7 @@ module.exports = app => {
 	app.put('/following/:user',isLoggedIn,addFollower)
 	app.delete('/following/:user',isLoggedIn,deleteFollower)
 }
-
+// to implement get/add/delete follower 
 const getFollowers=(req,res)=>{
 	const username = req.params.user? req.params.user:req.username
 	Profile.find({username:username}).exec(function(err,profiles){

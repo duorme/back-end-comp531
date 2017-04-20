@@ -3,6 +3,7 @@
 const Profile = require('./model.js').Profile
 const isLoggedIn = require('./middleware.js').isLoggedIn
 
+//get or update profile
 const index = (req, res) => {
 	res.send({hello: 'world'})
 }

@@ -19,7 +19,7 @@ const User = require('./model.js').User
 const Profile = require('./model.js').Profile
 const cookieKey='sid'
 const users={}
-
+// for facebook oauth
 passport.serializeUser(function(user,done){
 	users[user.id]=user
 	done(null,user.id)
@@ -104,10 +104,11 @@ const userRegister=(req,res)=>{
 })
 }
 
-
+//generate sid
 const generateCode=(userObj)=>{
 	return md5(userObj.username+userObj.hash)
 }
+//generate salt for user
 const createSalt=(username)=>{
 	return new Date()+username
 }

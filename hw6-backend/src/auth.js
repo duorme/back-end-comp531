@@ -1,14 +1,65 @@
 const md5 = require('md5')
+const request = require('request')
+const qs = require('querystring')
+const session = require('express-session')
+const passport = require('passport')
+const FacebookStrategy = require('passport-facebook').Strategy;
 
+
+const config={   
+        'clientID'      : '698663930324108', // your App ID
+        'clientSecret'  : 'e9077b895e893db068594694890eafc4', // your App Secret
+        'callbackURL'   : 'http://localhost:3000/auth/facebook/callback'
+}
 var loginUser=''
 const cookieKey='sid'
 const userObj={}
+const users={}
+
+passport.serializeUser(function(user,done){
+	users[user.id]=user
+	done(null,user.id)
+})
+passport.deserializeUser(function(id,done){
+	const user = users[id]
+	done(null,user)
+})
+passport.use(new FacebookStrategy(config,
+	function(token,refreshToken,profile,done){
+		process.nextTick(function(){
+		const newUser={username:profile.name,
+		id:profile.id
+	}
+		users[newUser.id]=newUser
+			return done(null,profile)
+		})
+	}))
+
+
+// for log out
 const logout=(req,res)=>{
+	
+	req.logout();
+	res.redirect('/')
+}
+const logout_default=(req,res)=>{
 	loginUser=''
 	res.cookie(cookieKey,null,
 		{maxAge:-1,httpOnly:true})
 	res.status(200).send("OK")
 }
+
+const isLoggedIn=(req,res,next)=>{
+	if(req.isAuthenticated()){
+		next()
+	}else{
+		res.redirect('/login')
+	}
+}
+function profile(req,res){
+	res.send('ok now what?',req.user)
+}
+// for register
 const userRegister=(req,res)=>{
 	var username = req.body.username
 	var password = req.body.password
@@ -66,9 +117,17 @@ const putPassword=(req,res)=>{
 	user.hash=passSalted
 	res.send({username:loginUser,status:'will not changed'})
 }
+const fail=(req,res)=>{
+	res.send({status:'can not log in'})
+}
 module.exports = app =>{
 	app.post('/register',userRegister)
 	app.post('/login',userlogin)
-	app.put('/logout',logout)
+	app.use('/auth/facebook',passport.authenticate('facebook',{scope:'email'}))
+	app.use('/auth/facebook/callback',passport.authenticate('facebook',
+		{successRedirect:'/profile',failureRedirect:'/fail'}))
+	app.use('/profile',isLoggedIn,profile)
+	app.use('/logout',logout)
+	app.put('/logout',logout_default)
 	app.put('/password',putPassword)
 }

@@ -3,6 +3,12 @@ const bodyParser = require('body-parser')
 const logger = require('morgan')
 const cookieParser=require('cookie-parser')
 
+const request = require('request')
+const qs = require('querystring')
+const session = require('express-session')
+const passport = require('passport')
+const FacebookStrategy = require('passport-facebook').Strategy;
+
 
 if (process.env.NODE_ENV !== "production") {
     require('dotenv').load()
@@ -19,10 +25,16 @@ const corsMiddleware = (req, res, next) => {
     next()
 }
 const app = express()
+app.use(session({secret:'thisisSecretMessage'}))
+app.use(passport.initialize())
+app.use(passport.session())
 app.use(logger('default'))
 app.use(bodyParser.json())
 app.use(cookieParser())
 app.use(corsMiddleware)
+
+
+
 require('./src/articles.js')(app)
 require('./src/profile.js')(app)
 require('./src/auth.js')(app)

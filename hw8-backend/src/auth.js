@@ -34,7 +34,7 @@ passport.serializeUser(function(user,done){
 passport.deserializeUser(function(id,done){
 	// const user = users[id]
 	User.find({authId:id}).exec(function(err, user){
-		if(err || user.length == 0) return res.send({"message":"Please refresh the page, this authentication token has been used"})
+		if(err || user.length == 0) console.log(err)
 			else{
 				console.log('user',user[0])
 				return done(null,user[0])

@@ -287,7 +287,7 @@ module.exports = app =>{
 	app.use(passport.session())
 	app.use('/auth/facebook',passport.authenticate('facebook',{scope:'email'}))
 	app.use('/auth/facebook/callback',passport.authenticate('facebook',
-		{failureRedirect:'/fail',successRedirect:'http://localhost:8080'}))
+		{failureRedirect:'/fail',successRedirect:'https://piquant-ice.surge.sh'}))
 
 
 	app.post('/register',userRegister)
